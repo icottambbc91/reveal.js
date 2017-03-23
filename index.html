@@ -11,6 +11,11 @@
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<style type="text/css">
+			.reveal pre {
+				width: 100% !important;
+			}
+		</style>
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -25,14 +30,69 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<h1>Tools Framework</h1>
+					<h1>Tools Framework JS Library</h1>
 				</section>
 				<section>
-					<h2>Hey, haven't I heard of this before?</h2>
-					<p>Yes you have, it was developed as a BETA before christmas by Rob Gamm and James Robertson (CPS).</p>
-					<p>It's in use on TIPO and VIVO</p>
-					<p>It's being used on isite now, to launch castaway as an activity</p>
-					<p><a target="_blank" href="https://production.int.bbc.co.uk/isite2-xforms/fr/ian-test/picker/edit/15608c34-0bbb-4f5c-a628-1d3ffc96234e">Here's a snazy demo</a></p>
+					<h2>What is Tools Framework?</h2>
+					<ul>
+						<li class="fragment">A JavaScript library that's used to integrate an application (or activity) into another application to improve UX</li>
+						<li class="fragment">e.g. Open Castaway from within iSite in a sidedrawer</li>
+						<li class="fragment">Host: iSite</li>
+						<li class="fragment">Client: Castaway</li>
+						<li class="fragment">Activity: Upload a video</li>
+						<li class="fragment">Tools Framework enables the communication between the two</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Host code:</h2>
+					<ol>
+						<li>
+							<p>Initiate the host</p>
+							<pre><code data-trim data-noescape>
+							TF.Host.init({
+							  applicationId: 'iSite',
+							});
+								</code></pre>
+						</li>
+						<li>
+							<p>Set up a launch button</p>
+							<pre><code data-trim data-noescape>
+              TF.Host.setupActivityButton($button_element, {
+                action: 'create',
+                type: 'pid',
+                onComplete: onCompleteActivity,
+                launcher: new IntGelDrawerLauncher(),
+              });
+								</code></pre>
+						</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Client code:</h2>
+					<ol>
+						<li>
+							<p>Initiate the Client</p>
+							<pre><code data-trim data-noescape>
+                TF.Client.init({
+                  clientUI: new TF.ReplaceAppBar(
+                    '#intGEL-mainHeader',
+                    { applicationIconPath: '/assets/img/home.png' }
+                  )
+                });
+								</code></pre>
+						</li>
+						<li>
+							<p>Specify when activity is complete</p>
+							<pre><code data-trim>
+              if ($scope.job.clip_pid != result.clip_pid) {
+                if(TF.Client.isActive()){
+                  TF.Client.promptComplete(result.clip_pid + ': Use this PID?',
+                   result.clip_pid);
+                }
+              }
+								</code></pre>
+						</li>
+					</ol>
 				</section>
 				<!-- talk about in the demo:
 					- TF bar to restrict user actions
@@ -42,21 +102,23 @@
 				-->
 				<!-- Need to iron out what exactly is doing what i.e. What does Client need to do. What does Host need to do. --> 
 				<section>
-					What's changed? Why are we talking about it again.
-					<p>New features:</p>
+					<h2>Search as an activity</h2>
+					<img src="img/search.png">
+				</section>
+				<section>
+					<h2>Latest features</h2>
 					<ul>
-						<li>Close callback - implemented on the HOST</li>
-						<li>Sidedrawer is shipping with Tools Framework as a UI component - it uses int gel matter</li>
-						<!-- list other improvements -->
+						<li class="fragment">End-to-end tests</li>
+						<li class="fragment">Version check</li>
+						<li class="fragment">Modal launcher</li>
+						<li class="fragment">Error reporting to sumo logic</li>
+						<li class="fragment">dist CSS file</li>
 					</ul>
 				</section>
 				<section>
-					When will it be used in the future?
-					<p>Search as an activity</p>
-					<!-- could i get blaises ux stuff? -->
-				</section>
-				<section>
-					Taster for future presentations... What was this int gel matter thing you mentioned? Well it's a compoenent library...
+					<h2>Int Gel Matter</h2>
+					<p>Where are all the ui components coming from?</p>
+					<p class="fragment">The Internal Gel Matter component library...</p>
 				</section>
 			</div>
 		</div>
